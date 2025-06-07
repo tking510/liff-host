@@ -12,27 +12,27 @@
     async function main() {
       let token;
 
-      // 1. liff.state から token 取得
+      // 1. liff.state → ?token=xxx の形式からtoken取得
       if (liff && liff.getContext && liff.getContext().liff && liff.getContext().liff.state) {
         const state = liff.getContext().liff.state;
         const stateParams = new URLSearchParams(state.startsWith('?') ? state : '?' + state);
         token = stateParams.get("token");
       }
 
-      // 2. fallback: location.search や hash
+      // 2. fallback: URLの検索/ハッシュにも探す
       if (!token) {
         const fromSearch = new URLSearchParams(location.search).get("token");
         const fromHash = new URLSearchParams(location.hash.substring(1)).get("token");
         token = fromSearch || fromHash;
       }
 
-      // 3. token未取得 → 中断
+      // 3. tokenがなければ中止
       if (!token) {
         document.body.innerHTML = "<h2>❌ tokenが見つかりません。正しいリンクからアクセスしてください。</h2>";
         return;
       }
 
-      // 4. LIFF初期化とログイン確認
+      // 4. LIFF初期化
       try {
         await liff.init({
           liffId: "2007540103-a2139drg",
@@ -43,12 +43,15 @@
         return;
       }
 
+      // 5. ログインしていなければ login → 現在のURLに戻す（token維持）
       if (!liff.isLoggedIn()) {
-        liff.login();
+        liff.login({
+          redirectUri: location.href
+        });
         return;
       }
 
-      // 5. プロフィール取得と送信
+      // 6. LINEプロフィール取得してWebhook送信
       try {
         const profile = await liff.getProfile();
         const webhookUrl = "https://script.google.com/macros/s/AKfycbwjBOltVT5X6tXnia-dESxVezZYkWtgSfFPbdqydyvdyWZimis3nm0GHiWtNbx7wwGvBQ/exec";
