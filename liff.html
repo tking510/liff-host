@@ -34,15 +34,20 @@
     await liff.ready;
 
     try {
-      await liff.init({
-        liffId: "2007540103-a2139drg",
-        withLoginOnExternalBrowser: true
-      });
+  await liff.init({
+    liffId: "2007540103-a2139drg",
+    withLoginOnExternalBrowser: true
+  });
+} catch (err) {
+  document.body.innerHTML = "<h2>❌ LIFF初期化失敗：" + err.message + "</h2>";
+  return;
+}
 
-      if (!liff.isLoggedIn()) {
-        liff.login();
-        return;
-      }
+if (!liff.isLoggedIn()) {
+  liff.login();
+  return;
+}
+
 
       const profile = await liff.getProfile();
       const webhookUrl = "https://script.google.com/macros/s/AKfycbwjBOltVT5X6tXnia-dESxVezZYkWtgSfFPbdqydyvdyWZimis3nm0GHiWtNbx7wwGvBQ/exec"; // ← あなたのGAS URLに置き換えてください
