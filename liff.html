@@ -1,65 +1,82 @@
-<script>
-  async function main() {
-    let token;
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>登録処理中...</title>
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+</head>
+<body>
+  <h2>LINEに接続中です。少々お待ちください...</h2>
 
-    try {
-      // 1. 必ず最初に liff.init()
-      await liff.init({
-        liffId: "2007540103-a2139drg",
-        withLoginOnExternalBrowser: true
-      });
-      console.log("✅ liff.init OK");
-    } catch (err) {
-      console.error("❌ LIFF初期化失敗:", err.message);
-      document.body.innerHTML = "<h2>❌ LIFF初期化失敗：" + err.message + "</h2>";
-      return;
+  <script>
+    async function main() {
+      let token;
+
+      try {
+        await liff.init({
+          liffId: "2007540103-a2139drg",
+          withLoginOnExternalBrowser: true
+        });
+        console.log("✅ liff.init 完了");
+      } catch (err) {
+        console.error("❌ LIFF初期化失敗:", err.message);
+        document.body.innerHTML = "<h2>❌ LIFF初期化失敗：" + err.message + "</h2>";
+        return;
+      }
+
+      try {
+        if (liff.getContext && liff.getContext().liff && liff.getContext().liff.state) {
+          const state = liff.getContext().liff.state;
+          const stateParams = new URLSearchParams(state.startsWith('?') ? state : '?' + state);
+          token = stateParams.get("token");
+          console.log("✅ liff.state token:", token);
+        }
+      } catch (err) {
+        console.warn("⚠️ liff.state 読み込み失敗");
+      }
+
+      if (!token) {
+        const fromSearch = new URLSearchParams(location.search).get("token");
+        const fromHash = new URLSearchParams(location.hash.substring(1)).get("token");
+        token = fromSearch || fromHash;
+        console.log("✅ fallback token:", token);
+      }
+
+      if (!token) {
+        document.body.innerHTML = "<h2>❌ tokenが見つかりません。</h2>";
+        return;
+      }
+
+      if (!liff.isLoggedIn()) {
+        liff.login({ redirectUri: location.href });
+        return;
+      }
+
+      try {
+        const profile = await liff.getProfile();
+        const webhookUrl = "https://script.google.com/macros/s/AKfycbwjBOltVT5X6tXnia-dESxVezZYkWtgSfFPbdqydyvdyWZimis3nm0GHiWtNbx7wwGvBQ/exec";
+
+        await fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            line_id: profile.userId,
+            name: profile.displayName,
+            phone: token
+          })
+        });
+
+        document.body.innerHTML = "<h2>✅ 登録が完了しました</h2>";
+      } catch (err) {
+        console.error("❌ 登録中エラー:", err.message);
+        document.body.innerHTML = "<h2>❌ エラー：" + err.message + "</h2>";
+      }
     }
 
-    // 2. liff.init() 後に token取得
-    try {
-      const state = liff.getContext().liff.state;
-      const stateParams = new URLSearchParams(state.startsWith('?') ? state : '?' + state);
-      token = stateParams.get("token");
-      console.log("✅ token (from liff.state):", token);
-    } catch (err) {
-      console.warn("⚠️ liff.state 読み込み失敗（非LIFF環境か）");
-    }
-
-    // 3. fallback
-    if (!token) {
-      const fromSearch = new URLSearchParams(location.search).get("token");
-      const fromHash = new URLSearchParams(location.hash.substring(1)).get("token");
-      token = fromSearch || fromHash;
-      console.log("✅ token (fallback):", token);
-    }
-
-    if (!token) {
-      document.body.innerHTML = "<h2>❌ tokenが見つかりません。</h2>";
-      return;
-    }
-
-    if (!liff.isLoggedIn()) {
-      liff.login({ redirectUri: location.href });
-      return;
-    }
-
-    const profile = await liff.getProfile();
-    console.log("✅ profile:", profile);
-
-    const webhookUrl = "https://script.google.com/macros/s/AKfycbwjBOltVT5X6tXnia-dESxVezZYkWtgSfFPbdqydyvdyWZimis3nm0GHiWtNbx7wwGvBQ/exec";
-
-    await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        line_id: profile.userId,
-        name: profile.displayName,
-        phone: token
-      })
-    });
-
-    document.body.innerHTML = "<h2>✅ 登録が完了しました</h2>";
-  }
-
-  main();
-</script>
+    // ✅ スクリプト読み込み完了後に実行（これが重要）
+    window.onload = function () {
+      main();
+    };
+  </script>
+</body>
+</html>
