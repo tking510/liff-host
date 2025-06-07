@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>登録処理中...</title>
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+</head>
+<body>
+  <h2>LINEに接続中です。少々お待ちください...</h2>
+
+  <script>
+    async function main() {
+      const token = new URLSearchParams(location.search).get("token"); // 電話番号など
+      if (!token) {
+        document.body.innerHTML = "<h2>❌ tokenが見つかりません。正しいリンクからアクセスしてください。</h2>";
+        return;
+      }
+
+      try {
+        await liff.init({ liffId: "2007540103-a2139drg" });
+
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+
+        const profile = await liff.getProfile();
+        const userId = profile.userId;
+        const name = profile.displayName;
+
+        // 送信先のWebhook（GASや中継サーバー）URLをここに入れてください
+        const webhookUrl = "https://script.google.com/macros/s/AKfycbwjBOltVT5X6tXnia-dESxVezZYkWtgSfFPbdqydyvdyWZimis3nm0GHiWtNbx7wwGvBQ/exec"; // ←変更必要
+
+        await fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            line_id: userId,
+            name: name,
+            phone: token
+          })
+        });
+
+        document.body.innerHTML = "<h2>✅ 登録が完了しました。LINEでのご案内をお待ちください。</h2>";
+      } catch (e) {
+        console.error(e);
+        document.body.innerHTML = "<h2>❌ 登録に失敗しました。もう一度お試しください。</h2>";
+      }
+    }
+
+    main();
+  </script>
+</body>
+</html>
