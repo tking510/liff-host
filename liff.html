@@ -60,14 +60,16 @@
         const webhookUrl = "https://script.google.com/macros/s/AKfycbwjBOltVT5X6tXnia-dESxVezZYkWtgSfFPbdqydyvdyWZimis3nm0GHiWtNbx7wwGvBQ/exec";
 
         await fetch(webhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            line_id: profile.userId,
-            name: profile.displayName,
-            phone: token
-          })
-        });
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  mode: "no-cors", // ← 追加
+  body: JSON.stringify({
+    line_id: profile.userId,
+    name: profile.displayName,
+    phone: token
+  })
+});
+
 
         document.body.innerHTML = "<h2>✅ 登録が完了しました</h2>";
 
