@@ -7,55 +7,47 @@
 </head>
 <body>
   <h2>LINEに接続中です。少々お待ちください...</h2>
+<script>
+  async function main() {
+    const fromSearch = new URLSearchParams(location.search).get("token");
+    const fromHash = new URLSearchParams(location.hash.substring(1)).get("token");
+    const token = fromSearch || fromHash;
 
-  <script>
-    async function main() {
-  const fromSearch = new URLSearchParams(location.search).get("token");
-  const fromHash = new URLSearchParams(location.hash.substring(1)).get("token");
-  const token = fromSearch || fromHash;
-
-  if (!token) {
-    document.body.innerHTML = "<h2>❌ tokenが見つかりません。正しいリンクからアクセスしてください。</h2>";
-    return;
-  }
-
-  // ↓ここから先は変わらずLIFF init
-}
-
-
-      try {
-        await liff.init({ liffId: "2007540103-a2139drg" });
-
-        if (!liff.isLoggedIn()) {
-          liff.login();
-          return;
-        }
-
-        const profile = await liff.getProfile();
-        const userId = profile.userId;
-        const name = profile.displayName;
-
-        // 送信先のWebhook（GASや中継サーバー）URLをここに入れてください
-        const webhookUrl = "https://script.google.com/macros/s/AKfycbwjBOltVT5X6tXnia-dESxVezZYkWtgSfFPbdqydyvdyWZimis3nm0GHiWtNbx7wwGvBQ/exec"; // ←変更必要
-
-        await fetch(webhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            line_id: userId,
-            name: name,
-            phone: token
-          })
-        });
-
-        document.body.innerHTML = "<h2>✅ 登録が完了しました。LINEでのご案内をお待ちください。</h2>";
-      } catch (e) {
-        console.error(e);
-        document.body.innerHTML = "<h2>❌ 登録に失敗しました。もう一度お試しください。</h2>";
-      }
+    if (!token) {
+      document.body.innerHTML = "<h2>❌ tokenが見つかりません。正しいリンクからアクセスしてください。</h2>";
+      return;
     }
 
-    main();
-  </script>
+    try {
+      await liff.init({ liffId: "2007540103-a2139drg" });
+
+      if (!liff.isLoggedIn()) {
+        liff.login();
+        return;
+      }
+
+      const profile = await liff.getProfile();
+      const webhookUrl = "https://script.google.com/macros/s/XXXXXXXXXXXXXXXXXX/exec";
+
+      await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          line_id: profile.userId,
+          name: profile.displayName,
+          phone: token
+        })
+      });
+
+      document.body.innerHTML = "<h2>✅ 登録が完了しました</h2>";
+    } catch (err) {
+      document.body.innerHTML = "<h2>❌ エラー：" + err.message + "</h2>";
+    }
+  }
+
+  // ←これを忘れずに
+  main();
+</script>
+
 </body>
 </html>
