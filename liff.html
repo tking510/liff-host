@@ -10,7 +10,8 @@
 
   <script>
     async function main() {
-      const token = new URLSearchParams(location.search).get("token"); // 電話番号など
+      const token = new URLSearchParams(location.search || location.hash.substring(1)).get("token");
+
       if (!token) {
         document.body.innerHTML = "<h2>❌ tokenが見つかりません。正しいリンクからアクセスしてください。</h2>";
         return;
