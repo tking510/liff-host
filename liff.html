@@ -62,7 +62,7 @@
         await fetch(webhookUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          mode: "no-cors", // ← これが超重要
+          mode: "no-cors",
           body: JSON.stringify({
             line_id: profile.userId,
             name: profile.displayName,
@@ -71,6 +71,12 @@
         });
 
         document.body.innerHTML = "<h2>✅ 登録が完了しました</h2>";
+
+        // ✅ この一行を最後に追加（LINEのトーク画面に自動で戻す）
+        setTimeout(() => {
+          liff.closeWindow();
+        }, 1000);
+
       } catch (err) {
         console.error("❌ fetchエラー:", err.message);
         document.body.innerHTML = "<h2>❌ エラー：" + err.message + "</h2>";
