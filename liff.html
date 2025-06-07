@@ -12,32 +12,8 @@
     async function main() {
       let token;
 
-      // 1. token取得（liff.state → search → hash）
-      console.log("🔍 token取得開始");
-
-      if (liff && liff.getContext && liff.getContext().liff && liff.getContext().liff.state) {
-        const state = liff.getContext().liff.state;
-        const stateParams = new URLSearchParams(state.startsWith('?') ? state : '?' + state);
-        token = stateParams.get("token");
-        console.log("✅ liff.state から token:", token);
-      }
-
-      if (!token) {
-        const fromSearch = new URLSearchParams(location.search).get("token");
-        const fromHash = new URLSearchParams(location.hash.substring(1)).get("token");
-        token = fromSearch || fromHash;
-        console.log("✅ fallback から token:", token);
-      }
-
-      if (!token) {
-        console.error("❌ tokenが見つかりません");
-        document.body.innerHTML = "<h2>❌ tokenが見つかりません。正しいリンクからアクセスしてください。</h2>";
-        return;
-      }
-
-      // 2. LIFF初期化
+      // 1. LIFF 初期化が最優先
       try {
-        console.log("⚙️ liff.init 開始");
         await liff.init({
           liffId: "2007540103-a2139drg",
           withLoginOnExternalBrowser: true
@@ -49,21 +25,42 @@
         return;
       }
 
-      // 3. ログインチェック
-      if (!liff.isLoggedIn()) {
-        console.warn("🔁 ログイン未完了。リダイレクトします。");
-        liff.login({
-          redirectUri: location.href
-        });
+      // 2. liff.state → token 取得
+      try {
+        if (liff.getContext && liff.getContext().liff && liff.getContext().liff.state) {
+          const state = liff.getContext().liff.state;
+          const stateParams = new URLSearchParams(state.startsWith('?') ? state : '?' + state);
+          token = stateParams.get("token");
+          console.log("✅ liff.state token:", token);
+        }
+      } catch (err) {
+        console.warn("⚠️ liff.state 読み込み失敗（非必須）");
+      }
+
+      // 3. fallback: URL検索やハッシュからtoken取得
+      if (!token) {
+        const fromSearch = new URLSearchParams(location.search).get("token");
+        const fromHash = new URLSearchParams(location.hash.substring(1)).get("token");
+        token = fromSearch || fromHash;
+        console.log("✅ fallback token:", token);
+      }
+
+      if (!token) {
+        document.body.innerHTML = "<h2>❌ tokenが見つかりません。正しいリンクからアクセスしてください。</h2>";
         return;
       }
 
-      console.log("✅ ログイン済み → プロフィール取得");
+      // 4. ログイン確認
+      if (!liff.isLoggedIn()) {
+        console.log("🔁 liff.login にリダイレクト");
+        liff.login({ redirectUri: location.href });
+        return;
+      }
 
-      // 4. プロフィール取得＆Webhook送信
+      // 5. プロフィール取得とWebhook送信
       try {
         const profile = await liff.getProfile();
-        console.log("✅ プロフィール:", profile);
+        console.log("✅ profile:", profile);
 
         const webhookUrl = "https://script.google.com/macros/s/AKfycbwjBOltVT5X6tXnia-dESxVezZYkWtgSfFPbdqydyvdyWZimis3nm0GHiWtNbx7wwGvBQ/exec";
 
@@ -80,7 +77,7 @@
         console.log("✅ fetch送信完了");
         document.body.innerHTML = "<h2>✅ 登録が完了しました</h2>";
       } catch (err) {
-        console.error("❌ 登録処理中エラー:", err.message);
+        console.error("❌ 登録中エラー:", err.message);
         document.body.innerHTML = "<h2>❌ エラー：" + err.message + "</h2>";
       }
     }
