@@ -62,7 +62,6 @@
         await fetch(webhookUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          mode: "no-cors",
           body: JSON.stringify({
             line_id: profile.userId,
             name: profile.displayName,
@@ -72,9 +71,13 @@
 
         document.body.innerHTML = "<h2>✅ 登録が完了しました</h2>";
 
-        // ✅ この一行を最後に追加（LINEのトーク画面に自動で戻す）
+        // ✅ トーク画面へ戻す or 外部ブラウザならリダイレクト
         setTimeout(() => {
-          liff.closeWindow();
+          if (liff.isInClient()) {
+            liff.closeWindow(); // LINEアプリ内 → トークに戻る
+          } else {
+            window.location.href = "https://lin.ee/lsMnQ88"; // 外部ブラウザ → 指定リンクに飛ばす
+          }
         }, 1000);
 
       } catch (err) {
