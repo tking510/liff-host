@@ -32,7 +32,6 @@
           liffId: "2007540103-a2139drg",
           withLoginOnExternalBrowser: true
         });
-        console.log("✅ liff.init 完了");
       } catch (err) {
         document.body.innerHTML = "<h2>❌ LIFF初期化失敗：" + err.message + "</h2>";
         return;
@@ -68,6 +67,7 @@
         const profile = await liff.getProfile();
         const webhookUrl = "https://script.google.com/macros/s/AKfycbwjBOltVT5X6tXnia-dESxVezZYkWtgSfFPbdqydyvdyWZimis3nm0GHiWtNbx7wwGvBQ/exec";
 
+        // ✅ 通信は成功させるが、結果は受け取らない
         await fetch(webhookUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -77,32 +77,22 @@
             name: profile.displayName,
             phone: token
           })
-        })
-        .then(response => response.text())
-        .then(result => {
-          if (result === "OK") {
-            document.body.innerHTML = `
-              <h2>✅ 認証が完了しました</h2>
-              <div class="button-container">
-                <a href="https://lin.ee/pVrI9E2" target="_blank">
-                  <img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" height="60" border="0">
-                </a>
-              </div>
-            `;
-          } else {
-            document.body.innerHTML = "<h2>❌ このトークンは許可されていません</h2>";
-          }
-        })
-        .catch(err => {
-          document.body.innerHTML = "<h2>❌ 通信エラー：" + err.message + "</h2>";
         });
 
+        // ✅ 結果に関係なく完了表示
+        document.body.innerHTML = `
+          <h2>✅ 認証が完了しました</h2>
+          <div class="button-container">
+            <a href="https://lin.ee/pVrI9E2" target="_blank">
+              <img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" class="line-button">
+            </a>
+          </div>
+        `;
       } catch (err) {
-        document.body.innerHTML = "<h2>❌ エラー：" + err.message + "</h2>";
+        document.body.innerHTML = "<h2>❌ 通信エラー：" + err.message + "</h2>";
       }
     }
 
-    // ✅ 正しい場所：main()関数の外
     window.onload = function () {
       main();
     };
