@@ -7,36 +7,35 @@
 </head>
 <body>
   <h2>LINEに接続中です。少々お待ちください...</h2>
+
 <script>
   async function main() {
-  let token;
+    let token;
 
-  // 1. LIFFが使うliff.stateからtokenを取得
-  if (liff && liff.getContext && liff.getContext().liff && liff.getContext().liff.state) {
-    const state = liff.getContext().liff.state;
-    const stateParams = new URLSearchParams(state.startsWith('?') ? state : '?' + state);
-    token = stateParams.get("token");
-  }
+    // 1. LIFFのstateから取得
+    if (liff && liff.getContext && liff.getContext().liff && liff.getContext().liff.state) {
+      const state = liff.getContext().liff.state;
+      const stateParams = new URLSearchParams(state.startsWith('?') ? state : '?' + state);
+      token = stateParams.get("token");
+    }
 
-  // 2. fallback: search や hash にtokenがある場合も見る
-  if (!token) {
-    const fromSearch = new URLSearchParams(location.search).get("token");
-    const fromHash = new URLSearchParams(location.hash.substring(1)).get("token");
-    token = fromSearch || fromHash;
-  }
+    // 2. fallback: search や hash にある場合
+    if (!token) {
+      const fromSearch = new URLSearchParams(location.search).get("token");
+      const fromHash = new URLSearchParams(location.hash.substring(1)).get("token");
+      token = fromSearch || fromHash;
+    }
 
-  // 3. tokenが取れなかったらエラー表示
-  if (!token) {
-    document.body.innerHTML = "<h2>❌ tokenが見つかりません。正しいリンクからアクセスしてください。</h2>";
-    return;
-  }
-
-  // ↓この下にLIFF処理（init, login, profile取得 etc）が続く
-}
-
+    if (!token) {
+      document.body.innerHTML = "<h2>❌ tokenが見つかりません。正しいリンクからアクセスしてください。</h2>";
+      return;
+    }
 
     try {
-      await liff.init({ liffId: "2007540103-a2139drg" });
+      await liff.init({
+        liffId: "2007540103-a2139drg",
+        withLoginOnExternalBrowser: true
+      });
 
       if (!liff.isLoggedIn()) {
         liff.login();
@@ -44,7 +43,7 @@
       }
 
       const profile = await liff.getProfile();
-      const webhookUrl = "https://script.google.com/macros/s/AKfycbwjBOltVT5X6tXnia-dESxVezZYkWtgSfFPbdqydyvdyWZimis3nm0GHiWtNbx7wwGvBQ/exec";
+      const webhookUrl = "https://script.google.com/macros/s/AKfycbwjBOltVT5X6tXnia-dESxVezZYkWtgSfFPbdqydyvdyWZimis3nm0GHiWtNbx7wwGvBQ/exec"; // ← あなたのGAS URLに置き換えてください
 
       await fetch(webhookUrl, {
         method: "POST",
@@ -62,7 +61,6 @@
     }
   }
 
-  // ←これを忘れずに
   main();
 </script>
 
