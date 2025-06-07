@@ -30,6 +30,8 @@
       document.body.innerHTML = "<h2>❌ tokenが見つかりません。正しいリンクからアクセスしてください。</h2>";
       return;
     }
+      try {
+    await liff.ready;
 
     try {
       await liff.init({
