@@ -48,6 +48,7 @@
       }
 
       if (!liff.isLoggedIn()) {
+        console.log("🔁 ログイン中");
         liff.login({ redirectUri: location.href });
         return;
       }
@@ -73,7 +74,7 @@
       }
     }
 
-    // ✅ スクリプト読み込み完了後に実行（これが重要）
+    // ✅ スクリプトが完全に読み込まれてから実行
     window.onload = function () {
       main();
     };
