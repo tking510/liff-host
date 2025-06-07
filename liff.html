@@ -10,8 +10,8 @@
 
   <script>
     async function main() {
-      const token = new URLSearchParams(location.search || location.hash.substring(1)).get("token");
-
+      const params = new URLSearchParams(location.search || location.hash.substring(1));
+const token = params.get("token");
       if (!token) {
         document.body.innerHTML = "<h2>❌ tokenが見つかりません。正しいリンクからアクセスしてください。</h2>";
         return;
