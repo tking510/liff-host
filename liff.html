@@ -62,13 +62,14 @@
         await fetch(webhookUrl, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
-  mode: "no-cors", // ← 追加
+  mode: "no-cors", // ✅ これが超重要（スマホ対策）
   body: JSON.stringify({
     line_id: profile.userId,
     name: profile.displayName,
     phone: token
   })
 });
+
 
 
         document.body.innerHTML = "<h2>✅ 登録が完了しました</h2>";
