@@ -10,12 +10,18 @@
 
   <script>
     async function main() {
-      const params = new URLSearchParams(location.search || location.hash.substring(1));
-const token = params.get("token");
-      if (!token) {
-        document.body.innerHTML = "<h2>❌ tokenが見つかりません。正しいリンクからアクセスしてください。</h2>";
-        return;
-      }
+  const fromSearch = new URLSearchParams(location.search).get("token");
+  const fromHash = new URLSearchParams(location.hash.substring(1)).get("token");
+  const token = fromSearch || fromHash;
+
+  if (!token) {
+    document.body.innerHTML = "<h2>❌ tokenが見つかりません。正しいリンクからアクセスしてください。</h2>";
+    return;
+  }
+
+  // ↓ここから先は変わらずLIFF init
+}
+
 
       try {
         await liff.init({ liffId: "2007540103-a2139drg" });
