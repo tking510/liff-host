@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXCLUSIVE CAMPAIGN - 最初の勝利</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        .luxury-font {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4a 50%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gold-border {
+            border: 2px solid #ffd700;
+            position: relative;
+        }
+        
+        .gold-border::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            background: linear-gradient(45deg, #ffd700, #ffed4a, #f59e0b, #ffd700);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .premium-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .diamond-pattern {
+            background-image: 
+                linear-gradient(45deg, transparent 40%, rgba(255, 215, 0, 0.1) 50%, transparent 60%),
+                linear-gradient(-45deg, transparent 40%, rgba(255, 215, 0, 0.1) 50%, transparent 60%);
+            background-size: 30px 30px;
+        }
+        
+        .hover-scale {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.02);
+            box-shadow: 0 30px 60px rgba(255, 215, 0, 0.2);
+        }
+        
+        .pulse-gold {
+            animation: pulse-gold 2s infinite;
+        }
+        
+        @keyframes pulse-gold {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.6); }
+        }
+        
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #ffd700 50%, transparent 100%);
+            margin: 4rem 0;
+        }
+        
+        .premium-number {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .benefit-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .countdown-style {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="relative py-16 text-center">
+        <div class="container mx-auto px-6">
+            <div class="mb-8">
+                <h1 class="luxury-font text-6xl md:text-8xl font-bold gradient-text mb-4">
+                    EXCLUSIVE
+                </h1>
+                <h2 class="text-3xl md:text-4xl font-light text-gray-300 mb-8">
+                    最初の勝利キャンペーン
+                </h2>
+                <div class="countdown-style inline-block">
+                    <i class="fas fa-clock mr-2"></i>
+                    期間限定オファー
+                </div>
+            </div>
+        </div>
+        <div class="section-divider"></div>
+    </header>
+
+    <!-- Main Campaign Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="luxury-font text-4xl md:text-5xl font-bold gradient-text mb-6">
+                    あなたの"最初の勝利"は、<br>次なる戦いの資金になる。
+                </h3>
+                <p class="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+                    今なら、初回出金時に2つの特典が即時付与されます。<br>
+                    エクスクルーシブな体験への扉を開く、特別なオファーです。
+                </p>
+            </div>
+
+            <!-- Benefits Section -->
+            <div class="grid md:grid-cols-2 gap-12 mb-16">
+                <!-- Benefit 1 -->
+                <div class="premium-card rounded-3xl p-8 hover-scale pulse-gold">
+                    <div class="benefit-icon">
+                        <i class="fas fa-coins text-3xl text-gray-900"></i>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="luxury-font text-2xl font-bold gradient-text mb-4">
+                            特典① 即時WINBOOST
+                        </h4>
+                        <div class="premium-number gradient-text mb-4">
+                            最大20%
+                        </div>
+                        <p class="text-lg text-gray-300 mb-6">
+                            あなたが初めて出金した額の最大20%を、次の戦いで負けたら付与
+                        </p>
+                        <div class="gold-border rounded-2xl p-6 mb-6">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-yellow-400 mb-2">実例</div>
+                                <div class="text-3xl font-bold mb-2">¥50,000</div>
+                                <div class="text-lg text-gray-400 mb-2">↓</div>
+                                <div class="text-3xl font-bold gradient-text">¥10,000 BACK</div>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-sm text-gray-400">
+                            <div><i class="fas fa-check text-green-400 mr-2"></i>対象上限：枠の500%</div>
+                            <div><i class="fas fa-check text-green-400 mr-2"></i>条件達成後、申請し反映</div>
+                            <div><i class="fas fa-check text-green-400 mr-2"></i>クーポンコード不要</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefit 2 -->
+                <div class="premium-card rounded-3xl p-8 hover-scale pulse-gold">
+                    <div class="benefit-icon">
+                        <i class="fas fa-arrow-up text-3xl text-gray-900"></i>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="luxury-font text-2xl font-bold gradient-text mb-4">
+                            特典② 枠100%アップ
+                        </h4>
+                        <div class="premium-number gradient-text mb-4">
+                            2倍
+                        </div>
+                        <p class="text-lg text-gray-300 mb-6">
+                            次回プレイ時に適用される「信用枠（クレジット枠）」が通常の2倍に
+                        </p>
+                        <div class="gold-border rounded-2xl p-6 mb-6">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-yellow-400 mb-2">昇格例</div>
+                                <div class="text-3xl font-bold mb-2">¥50,000枠</div>
+                                <div class="text-lg text-gray-400 mb-2">↓</div>
+                                <div class="text-3xl font-bold gradient-text">¥100,000枠に昇格</div>
+                                <div class="text-lg text-yellow-400 mt-2">🎉</div>
+                            </div>
+                        </div>
+                        <div class="countdown-style text-center">
+                            <i class="fas fa-hourglass-half mr-2"></i>
+                            登録後1週間有効の期間限定特典
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Conditions Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="premium-card rounded-3xl p-12 max-w-4xl mx-auto">
+                <h4 class="luxury-font text-3xl font-bold gradient-text text-center mb-8">
+                    🧾 適用条件
+                </h4>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="text-center">
+                        <div class="benefit-icon" style="width: 60px; height: 60px;">
+                            <i class="fas fa-check-circle text-2xl text-gray-900"></i>
+                        </div>
+                        <h5 class="text-xl font-bold mb-2">初回出金完了</h5>
+                        <p class="text-gray-300">初回の出金が完了していること</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="benefit-icon" style="width: 60px; height: 60px;">
+                            <i class="fas fa-id-card text-2xl text-gray-900"></i>
+                        </div>
+                        <h5 class="text-xl font-bold mb-2">KYC必須</h5>
+                        <p class="text-gray-300">※対象上限枠までが対象</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Catchphrase Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="text-center">
+                <h4 class="luxury-font text-2xl font-bold gradient-text mb-8">
+                    🚀 エクスクルーシブメッセージ
+                </h4>
+                <div class="space-y-8">
+                    <div class="premium-card rounded-3xl p-8 max-w-3xl mx-auto hover-scale">
+                        <h5 class="luxury-font text-4xl md:text-5xl font-bold gradient-text mb-4">
+                            "勝った瞬間、次の戦いが2倍に。"
+                        </h5>
+                    </div>
+                    <div class="premium-card rounded-3xl p-8 max-w-3xl mx-auto hover-scale">
+                        <h5 class="luxury-font text-4xl md:text-5xl font-bold gradient-text mb-4">
+                            "現金と信用、両方が増える。"
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <footer class="py-16 text-center">
+        <div class="container mx-auto px-6">
+            <div class="premium-card rounded-3xl p-12 max-w-4xl mx-auto hover-scale pulse-gold">
+                <h4 class="luxury-font text-4xl font-bold gradient-text mb-6">
+                    今すぐ始める
+                </h4>
+                <p class="text-xl text-gray-300 mb-8">
+                    この特別なオファーは期間限定です。<br>
+                    あなたの最初の勝利が、次なる成功への扉を開きます。
+                </p>
+                <div class="flex justify-center space-x-6">
+                    <div class="text-center">
+                        <i class="fas fa-crown text-4xl gradient-text mb-2"></i>
+                        <div class="text-lg font-bold">EXCLUSIVE</div>
+                    </div>
+                    <div class="text-center">
+                        <i class="fas fa-gem text-4xl gradient-text mb-2"></i>
+                        <div class="text-lg font-bold">PREMIUM</div>
+                    </div>
+                    <div class="text-center">
+                        <i class="fas fa-star text-4xl gradient-text mb-2"></i>
+                        <div class="text-lg font-bold">LIMITED</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Add subtle animations and interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Parallax effect for background elements
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.5;
+                document.body.style.backgroundPosition = `center ${rate}px`;
+            });
+
+            // Intersection Observer for fade-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all premium cards
+            document.querySelectorAll('.premium-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
